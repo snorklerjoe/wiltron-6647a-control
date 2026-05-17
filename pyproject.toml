@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wiltron-6647a-control"
+version = "0.1.0"
+description = "Simple pyvisa-based control library and PyQt softpanel for Wiltron 6647A"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+  "pyvisa>=1.13",
+  "gpib-ctypes",
+  "PyQt6>=6.6",
+]
+
+[tool.setuptools.packages.find]
+include = ["wiltron6647a*"]

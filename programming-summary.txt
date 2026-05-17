@@ -1,0 +1,379 @@
+Wiltron 6647A GPIB Programming Guide Summary
+1. Instrument Communication Interface
+
+The Wiltron 6647A sweep generator functions as both a listener and a talker on the GPIB. It provides complete front-panel-control operation over the bus when equipped with Option 3.  
+IEEE 488 Subset Capabilities
+
+The instrument supports the following IEEE 488 interface bus subset functions:  
+
+    AH1: Acceptor Handshake (Complete Capability)   
+
+    SH1: Source Handshake (Complete Capability)   
+
+    T6: Talker (Basic Talker, Serial Poll, Unaddressed if MLA, No Talk Only)   
+
+    L4: Listener (Basic Listener, Unaddressed if MTA, No Listen Only)   
+
+    SR1: Service Request (Complete Capability)   
+
+    RL1: Remote/Local (Complete Capability)   
+
+    PP1: Parallel Poll (Complete Capability)   
+
+    DC1: Device Clear (Complete Capability)   
+
+    DT1: Device Trigger (Complete Capability)   
+
+    C0, TE0, LE0: No Controller or Address Extension Capabilities   
+
+Message Syntax and Error Handling
+
+Communication is achieved via device-dependent commands (bus commands) and IEEE 488 Bus Messages.  
+
+    Parameter Syntax: Values are written exactly as they are entered from the keyboard (integers or decimal numbers) and must be followed by a suitable terminator (e.g., GH, MH, SEC).  
+
+    Command Chaining: Multiple commands can be sent in a single string (e.g., "DF0 F02GH DLF10MH AUT" ).  
+
+    Invalid-Parameter Errors: Attempting to enter out-of-bounds parameters, failing to use proper terminators, or setting a start frequency higher than a stop frequency will cause the front panel indicators to flash.  
+
+    Syntax Errors: Errors in command formulation (e.g., typing EXTTFS instead of EXTTRS) will cause the generator to ignore all subsequent portions of the command statement. The instrument will ignore all commands until it receives an Unlisten (UNL) command or is addressed to talk.  
+
+2. Supported IEEE 488 Bus Messages
+
+In addition to device-specific commands, the instrument recognizes standard bus messages:  
+Bus Message	Function
+Device Clear (DC/SDC)	
+
+Aborts GPIB activities and resets step sweep, SRQ modes, and event flags to default states.
+Go to Local (GTL)	
+
+Returns the sweep generator to local (front panel) control.
+Group Execute Trigger (GET)	
+
+Depending on configuration, triggers a new sweep, increments/decrements a selected parameter, or steps the digital sweep.
+Interface Clear (IFC)	
+
+Stops the interface from listening or talking without clearing front panel controls.
+Local Lockout (LLO)	
+
+Prevents the front panel "RETURN TO LOCAL" button or the RL command from returning the unit to local control.
+Remote Enable (REM)	
+
+Places the generator under remote control when addressed to listen.
+Serial Poll (SPE/SPD)	
+
+Causes the generator to output a status byte indicating if it requested service and why.
+Parallel Poll (PPC/PPE/PPU/PPD)	
+
+Configures the instrument to respond to parallel polls by asserting an assigned data line to indicate its SRQ status.
+3. Comprehensive Command Reference
+
+The instrument utilizes approximately 100 device-dependent bus commands divided into six classes.  
+A. Front-Panel-Control Related Commands
+Command	Name / Function	Usage / Notes
+F0XXXX	Set Sweep Time / RF Level	
+
+Add terminator GH or MH.
+F1XXXX	Set F1 Parameter	
+
+Add terminator GH or MH.
+F2XXXX	Set F2 Parameter	
+
+Add terminator GH or MH.
+M1XXXX	Set M1 Parameter	
+
+Add terminator GH or MH.
+M2XXXX	Set M2 Parameter	
+
+Add terminator GH or MH.
+DLFXXXX	Set delta-F (Sweep Width)	
+
+Add terminator GH or MH.
+SWTXX	Set Sweep Time	
+
+Add terminator SEC or MS.
+LVLXX	Set RF Level	
+
+Add terminator DM or DB.
+GH	GHz Terminator	
+
+Used for frequency parameters.
+MH	MHz Terminator	
+
+Used for frequency parameters.
+SEC	Seconds Terminator	
+
+Used for sweep time.
+MS	Milliseconds Terminator	
+
+Used for sweep time.
+DB	dB Terminator	
+
+Used for RF level.
+DM	dBm Terminator	
+
+Used for RF level.
+SH	Shift	
+
+Selects shifted functions.
+CLR	Clear Entry	
+
+Clears invalid or illegal parameter entries.
+FUL	Full Sweep	
+
+Selects FULL sweep range.
+FF	F1-F2 Sweep	
+
+Selects F1-F2 sweep range.
+MM	M1-M2 Sweep	
+
+Selects M1-M2 sweep range.
+DF0	delta-F F0 Sweep	
+
+Selects delta-F F0 sweep range.
+DF1	delta-F F1 Sweep	
+
+Selects delta-F F1 sweep range.
+CF0	CW F0	
+
+Selects CW F0 frequency.
+CF1	CW F1	
+
+Selects CW F1 frequency.
+CF2	CW F2	
+
+Selects CW F2 frequency.
+CM1	CW M1	
+
+Selects CW M1 frequency.
+CM2	CW M2	
+
+Selects CW M2 frequency.
+FVSXXXE	Increase Freq Vernier	
+
+Correction (+127 to -128) in 100 kHz steps.
+FVS-XXXE	Decrease Freq Vernier	
+
+Correction (+127 to -128) in 100 kHz steps.
+FV0	Freq Vernier Off	
+
+Cancels the vernier correction.
+AUT	Auto Trigger	
+
+Selects AUTO sweep trigger mode.
+LIN	Line Trigger	
+
+Selects LINE sweep trigger mode.
+EXT	External Trigger	
+
+Selects external sweep trigger mode.
+TRS	Trigger Single Sweep	
+
+Triggers a single sweep.
+MAN	Manual Sweep	
+
+Selects manual frequency tuning (requires front panel tuning).
+VM1	Video Marker On	
+
+Turns on video marker.
+RM1	RF Marker On	
+
+Turns on RF marker.
+IM1	Intensity Marker On	
+
+Turns on intensity marker.
+MKO	Markers Off	
+
+Turns all markers off.
+IL1	Internal Leveling	
+
+Selects internal leveling source.
+DL1	Detector Leveling	
+
+Selects detector leveling source.
+PL1	Power Meter Leveling	
+
+Selects power meter leveling source.
+LV0	Leveling Off	
+
+Turns leveling off.
+RF0	RF Off	
+
+Turns RF output off.
+RF1	RF On	
+
+Turns RF output on.
+RT0	Retrace RF Off	
+
+Turns RF off during retrace.
+RT1	Retrace RF On	
+
+Turns RF on during retrace.
+TST	Self Test	
+
+Initiates a self-test.
+RST	Reset	
+
+Resets controls to initialized state. Warning: unaddresses the GPIB interface, use at the end of a string.
+FM0	FM / Phase-Lock Off	
+
+Disables external frequency modulation/phase-lock.
+FM1	FM / Phase-Lock On	
+
+Enables external frequency modulation/phase-lock.
+B. Digital Step Sweep Commands
+Command	Name	Function
+STP	Step Sweep	
+
+Selects the Step Sweep mode of operation (4096 discrete points).
+STSXXXXE	Step Select	
+
+Selects increment point (0 to 4095) where the sweep starts. STS0E or STSE for zero.
+SIZXXXXE	Increment Size	
+
+Sets the step count (1 to 4 digits) for incrementing via the N, UP, or DN commands. Decimals are ignored.
+N	Go to Next Step	
+
+Increments the Step Sweep by the amount programmed in the SIZ command.
+C. Group Execute Trigger (GET) Mode Commands
+Command	Name	Function
+GTS	GET Trigger Sweep	
+
+A GET message executes a single sweep (Default mode).
+GTU	GET Execute UP	
+
+A GET message executes an UP command.
+GTD	GET Execute DN	
+
+A GET message executes a DN command.
+GTN	GET Execute N	
+
+A GET message executes an N command.
+D. Service Request (SRQ) Commands
+Command	Name	Function
+SQ1	Enable SRQ	
+
+Enables SRQ mode commands to request service.
+SQ0	Disable SRQ	
+
+Disables SRQ function (Default).
+DW1	Dwell-at-Marker On	
+
+Sweep dwells at intensity marker until CNT is received. If SQ1 is active, pulls SRQ line LOW and sets Status Byte bits 0 and 6 HIGH.
+DW0	Dwell-at-Marker Off	
+
+Deactivates dwell mode (Default).
+ES1	End-of-Sweep Mode On	
+
+If SQ1 is active, end of sweep pulls SRQ LOW and sets Status Byte bits 1 and 6 HIGH.
+ES0	End-of-Sweep Mode Off	
+
+Deactivates end-of-sweep mode (Default).
+UL1	Unleveled Condition On	
+
+If SQ1 is active, an unleveled output pulls SRQ LOW and sets Status Byte bits 2 and 6 HIGH.
+UL0	Unleveled Condition Off	
+
+Deactivates unleveled mode (Default).
+PE1	Param-Entry Error On	
+
+If SQ1 is active, a parameter error pulls SRQ LOW and sets Status Byte bits 4 and 6 HIGH.
+PE0	Param-Entry Error Off	
+
+Deactivates parameter error mode (Default).
+SE1	Syntax Error Mode On	
+
+If SQ1 is active, a syntax error pulls SRQ LOW and sets Status Byte bits 5 and 6 HIGH.
+SE0	Syntax Error Mode Off	
+
+Deactivates syntax error mode (Default).
+E. Output Commands
+
+When any of these commands are received, the generator outputs the requested data the next time it is addressed to talk.  
+Command	Name	Function
+OI	Identify Instrument	
+
+Returns 40 bytes: Model Number, Low-end Freq (GHz), High-end Freq (GHz), Min Power (dBm), Max Power (dBm), Software Rev.
+ODF	Output delta-F	
+
+Returns delta-F parameter in MHz.
+OF0	Output F0	
+
+Returns F0 parameter in MHz.
+OF1	Output F1	
+
+Returns F1 parameter in MHz.
+OF2	Output F2	
+
+Returns F2 parameter in MHz.
+OFL	Output Low-End Freq	
+
+Returns the low-end frequency limit.
+OFH	Output High-End Freq	
+
+Returns the high-end frequency limit.
+OM1	Output M1	
+
+Returns M1 parameter in MHz.
+OM2	Output M2	
+
+Returns M2 parameter in MHz.
+OLV	Output Power Level	
+
+Returns power level in +/- 0.1dB increments.
+OSB	Output Status Byte	
+
+Returns the Serial Poll Status Byte.
+OST	Output Sweep Time	
+
+Returns sweep time in milliseconds.
+F. Miscellaneous Commands
+Command	Name	Function
+CNT	Continue Sweep	
+
+Resumes sweep dwelling at a marker (used with DW1).
+DS0	Displays Off	
+
+Turns off front panel numeric displays.
+DS1	Displays On	
+
+Turns front panel numeric displays on (Default).
+DN	Decrement Parameter	
+
+Decrements the currently active parameter by the SIZ value. Pre-command the parameter (e.g., F1 DN) to ensure it's active.
+UP	Increment Parameter	
+
+Increments the currently active parameter by the SIZ value.
+FL0	CW Filter Off	
+
+Removes CW filter from RF line.
+FL1	CW Filter On	
+
+Inserts CW filter into RF line (overrides automatic selection).
+RL	Return to Local	
+
+Returns generator to front panel control (unless LLO is active).
+SAV	Save Settings	
+
+Returns an ASCII string (~310 bytes) of the entire instrument setup state to be recorded.
+RCL	Recall Settings	
+
+Sends the SAV string back to the instrument to restore its state.
+CS0	Horiz Output CW Off	
+
+Disables horizontal output during CW.
+CS1	Horiz Output CW On	
+
+Enables horizontal output during CW.
+RSS	Reset Sweep	
+
+Resets frequency sweep to the sweep-start frequency; aborts current sweep.
+4. Unclear or Missing Information in the Provided Text
+
+Based on the provided document, the following items are missing or unclear, which may affect full system programming:
+
+    Step Sweep Calculation Formula: The text notes that "frequencies corresponding to the step sweep's intermediate steps must be calculated" and points the reader to "Appendix 2" for the formula. However, Appendix 2 is not included in the provided text.  
+
+    Output Data Formatting: While the OI (Identify Instrument) command provides a clear 40-byte string format , the specific character lengths, decimal formatting, or termination characters for the rest of the output queries (like OF1, OLV, OST) are not defined.  
+
+    Appendix 1 Defaults: The text references Appendix 1 as a source for "Quick Reference Data" and "default data" for programmers. This appendix is missing from the provided text.  
